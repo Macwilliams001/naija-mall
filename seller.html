@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -10,4 +10,49 @@
     h1 { color: #008751; text-align: center; }
     label { display: block; margin-top: 15px; font-weight: bold; color: #333; }
     input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-    button { width: 100%; background: #008751; color: white; padding: 15px; border: none; border-radius: 5px; font
+    button { width: 100%; background: #008751; color: white; padding: 15px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+    button:hover { background: #006f3d; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    a { display: block; text-align: center; margin-top: 15px; color: #008751; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🇳🇬 Add Your Business</h1>
+    
+    <form id="businessForm">
+      <label>Business Name</label>
+      <input type="text" id="name" placeholder="e.g Mac's Footwear" required>
+
+      <label>Category</label>
+      <select id="category" required>
+        <option value="">-- Select Category --</option>
+        <option value="Fashion">Fashion & Clothing</option>
+        <option value="Food">Food & Restaurant</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Beauty">Beauty & Cosmetics</option>
+        <option value="Services">Services</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label>Address</label>
+      <input type="text" id="address" placeholder="e.g 12 Opebi Rd, Ikeja" required>
+
+      <label>Phone Number</label>
+      <input type="tel" id="phone" placeholder="e.g 09132108858" required>
+
+      <label>Description</label>
+      <textarea id="description" rows="4" placeholder="Tell us about your business" required></textarea>
+
+      <label>Business Image</label>
+      <input type="file" id="businessImage" accept="image/*" required>
+
+      <button type="submit">SUBMIT BUSINESS</button>
+    </form>
+
+    <a href="index.html">← Back to Homepage</a>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
