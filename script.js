@@ -1,29 +1,56 @@
-// script.js
-import { saveBusiness } from './firebase.js';
+import { db, storage, saveBusiness } from './firebase.js';
+import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('businessForm'); // your form must have this id
+const form = document.getElementById('businessForm');
 
-  if(form) {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const businessData = {
-        name: document.getElementById('businessName').value,
-        category: document.getElementById('category').value,
-        address: document.getElementById('address').value,
-        phone: document.getElementById('phone').value,
-        description: document.getElementById('description').value,
-      };
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const submitBtn = form.querySelector('button[type="submit"]');
+  submitBtn.innerText = "Uploading...";
+  submitBtn.disabled = true;
 
-      const success = await saveBusiness(businessData);
+  try {
+    // 1. Get form data
+    const name = document.getElementById('name').value;
+    const category = document.getElementById('category').value;
+    const address = document.getElementById('address').value;
+    const phone = document.getElementById('phone').value;
+    const description = document.getElementById('description').value;
+    const imageFile = document.getElementById('businessImage').files[0];
 
-      if(success) {
-        alert('Business submitted successfully! 🔥');
-        form.reset();
-      } else {
-        alert('Something went wrong. Please try again.');
-      }
-    });
+    if (!imageFile) {
+      alert("Please select an image");
+      return;
+    }
+
+    // 2. Upload image to Firebase Storage
+    const imageRef = ref(storage, `business_images/${Date.now()}_${imageFile.name}`);
+    const snapshot = await uploadBytes(imageRef, imageFile);
+    const imageUrl = await getDownloadURL(snapshot.ref);
+    
+    console.log("Image uploaded:", imageUrl);
+
+    // 3. Save business data + image URL to Firestore
+    const businessData = {
+      name,
+      category,
+      address,
+      phone,
+      description,
+      imageUrl // <-- This is the important part
+    };
+
+    await saveBusiness(businessData);
+
+    alert("Business submitted successfully! 🔥");
+    form.reset();
+
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Error submitting business: " + error.message);
+  } finally {
+    submitBtn.innerText = "SUBMIT BUSINESS";
+    submitBtn.disabled = false;
   }
 });
